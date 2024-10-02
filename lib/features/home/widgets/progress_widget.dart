@@ -11,7 +11,7 @@ class ProgressWidget extends StatelessWidget {
       width: double.infinity,
       height: 25.h,
       decoration: BoxDecoration(
-        color: AppConstants.primaryColor,
+        color: AppColors.primaryColor,
         gradient: LinearGradient(colors: [
           Colors.blue[300]!,
           Colors.blue[900]!,

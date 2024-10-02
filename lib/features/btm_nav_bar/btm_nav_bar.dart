@@ -47,7 +47,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
                   ),
                 );
               },
-              backgroundColor: AppConstants.primaryColor,
+              backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
               child: const Icon(Icons.add),
             )
