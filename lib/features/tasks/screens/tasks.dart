@@ -45,7 +45,8 @@ class _TasksState extends State<Tasks> with SingleTickerProviderStateMixin {
               child: ListView.builder(
             itemCount: tasksProvider.tasks.length,
             itemBuilder: (context, index) {
-              return Text("Hello");
+              TaskModel taskModel = tasksProvider.tasks[index];
+              return Text(taskModel.toString());
             },
           )),
           Center(child: Text('Content for Tab 2')),

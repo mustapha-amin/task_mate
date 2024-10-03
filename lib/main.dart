@@ -7,13 +7,12 @@ import 'package:task_mate/models/task_model.dart';
 import 'package:task_mate/providers/tasks_provider.dart';
 import 'package:task_mate/services/tasks_db.dart';
 import 'package:sizer/sizer.dart';
-import 'package:intl/intl.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(TaskModelAdapter());
-  Hive.openBox<TaskModel>('tasks');
+  await Hive.openBox<TaskModel>('task_db');
   runApp(const MyApp());
 }
 
@@ -27,27 +26,28 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return Sizer(
-      builder: (_, __, ___) {
-        return MaterialApp(
-          theme: ThemeData.from(
-              colorScheme:
-                  ColorScheme.fromSeed(seedColor: const Color(0xFF007AFF))),
-          home: MultiProvider(
-            providers: [
-              Provider<TasksDB>(
-                create: (_) => TasksDB(tasksBox: Hive.box<TaskModel>('tasks')),
-              ),
-              ChangeNotifierProvider(
-                create: (context) => TasksProvider(
-                    tasksDB: Provider.of<TasksDB>(context, listen: false)),
-              )
-            ],
-            child: AppBottomNavBar(),
+    return MultiProvider(
+      providers: [
+        Provider<TasksDB>(
+          create: (_) => TasksDB(tasksBox: Hive.box<TaskModel>('task_db')),
+        ),
+        ChangeNotifierProvider<TasksProvider>(
+          create: (context) => TasksProvider(
+            tasksDB: Provider.of<TasksDB>(context, listen: false),
           ),
-          debugShowCheckedModeBanner: false,
-        );
-      },
+        )
+      ],
+      child: Sizer(
+        builder: (_, __, ___) {
+          return MaterialApp(
+            theme: ThemeData.from(
+                colorScheme:
+                    ColorScheme.fromSeed(seedColor: const Color(0xFF007AFF))),
+            home: const AppBottomNavBar(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
+      ),
     );
   }
 }

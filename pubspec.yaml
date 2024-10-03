@@ -40,6 +40,8 @@ dependencies:
 
 dev_dependencies:
   flutter_lints: 4.0.0
+  build_runner:
+  hive_generator:
   flutter_test:
     sdk: flutter
 

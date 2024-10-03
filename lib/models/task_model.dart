@@ -2,8 +2,8 @@ import 'package:hive/hive.dart';
 
 part 'task_model.g.dart';
 
-@HiveType(typeId: 0)
-class TaskModel extends HiveObject{
+@HiveType(typeId: 1)
+class TaskModel extends HiveObject {
   @HiveField(0)
   String? task;
   @HiveField(1)
@@ -14,10 +14,10 @@ class TaskModel extends HiveObject{
   int? categoryIndex;
 
   TaskModel({
-    required String task,
-    required DateTime dateTime,
-    required bool completed,
-    required int categoryIndex,
+    this.task,
+    this.dateTime,
+    this.completed,
+    this.categoryIndex,
   });
 
   @override
@@ -33,4 +33,22 @@ class TaskModel extends HiveObject{
   @override
   int get hashCode => task.hashCode ^ dateTime.hashCode ^ completed.hashCode;
 
+  @override
+  String toString() {
+    return "$task ${dateTime.toString()} $completed $categoryIndex";
+  }
+
+  TaskModel copyWith({
+    String? task,
+    DateTime? dateTime,
+    bool? completed,
+    int? categoryIndex,
+  }) {
+    return TaskModel(
+      task: task ?? this.task,
+      dateTime: dateTime ?? this.dateTime,
+      completed: completed ?? this.completed,
+      categoryIndex: categoryIndex ?? this.categoryIndex,
+    );
+  }
 }

@@ -1,7 +1,10 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:task_mate/models/task_model.dart';
+import 'package:task_mate/providers/tasks_provider.dart';
 import 'package:task_mate/shared/spacing.dart';
 import 'package:task_mate/utils/colors.dart';
 import 'package:task_mate/utils/default_categories.dart';
@@ -18,14 +21,15 @@ class AddTask extends StatefulWidget {
 
 class _AddTaskState extends State<AddTask> {
   TextEditingController tasknameCtrl = TextEditingController();
-  TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController dateTimeCtrl = TextEditingController();
   DateTime? date;
   TimeOfDay? timeOfDay;
+  DateTime? dateTime;
   int categoryIndex = 0;
 
   @override
   Widget build(BuildContext context) {
+    TasksProvider tasksProvider = Provider.of<TasksProvider>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -50,7 +54,7 @@ class _AddTaskState extends State<AddTask> {
                   decoration: InputDecoration(
                     hintText: "Task",
                     hintStyle: kTextStyle(18, color: Colors.grey),
-                    border: OutlineInputBorder(),
+                    border: const OutlineInputBorder(),
                   ),
                 ),
                 spaceY(20),
@@ -93,14 +97,15 @@ class _AddTaskState extends State<AddTask> {
                   decoration: InputDecoration(
                     hintText: "Select date and time",
                     hintStyle: kTextStyle(18, color: Colors.grey),
-                    suffixIcon: Icon(Icons.calendar_month),
-                    border: OutlineInputBorder(),
+                    suffixIcon: const Icon(Icons.calendar_month),
+                    border: const OutlineInputBorder(),
                   ),
                   enabled: true,
                   readOnly: true,
                   onTap: () async {
                     date = await showDatePicker(
                       context: context,
+                      initialDate: DateTime.now(),
                       firstDate: DateTime.now(),
                       lastDate: DateTime(2099),
                     );
@@ -116,11 +121,11 @@ class _AddTaskState extends State<AddTask> {
                                 child: child!);
                           });
                       if (timeOfDay != null) {
-                        DateTime dateTime = DateTime(date!.year, date!.month,
-                            date!.day, timeOfDay!.hour, timeOfDay!.minute);
+                        dateTime = DateTime(date!.year, date!.month, date!.day,
+                            timeOfDay!.hour, timeOfDay!.minute);
                         setState(() {
                           dateTimeCtrl.text =
-                              "${DateFormat('d/M/y').format(dateTime)} - ${DateFormat.Hm().format(dateTime)}";
+                              "${DateFormat('d/M/y').format(dateTime!)} - ${DateFormat.Hm().format(dateTime!)}";
                         });
                       }
                     }
@@ -139,7 +144,34 @@ class _AddTaskState extends State<AddTask> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                if (tasknameCtrl.text.isNotEmpty && dateTime != null) {
+                  tasksProvider.addTask(TaskModel(
+                    task: tasknameCtrl.text,
+                    dateTime: dateTime!,
+                    completed: false,
+                    categoryIndex: categoryIndex,
+                  ));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Task created"),
+                      margin: EdgeInsets.all(5),
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(milliseconds: 500),
+                    ),
+                  );
+                  Navigator.pop(context);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text("Fill the required fields"),
+                      margin: EdgeInsets.all(5),
+                      behavior: SnackBarBehavior.floating,
+                      duration: Duration(milliseconds: 500),
+                    ),
+                  );
+                }
+              },
               child: Text(
                 "Create task",
                 style: kTextStyle(20, color: Colors.white),
