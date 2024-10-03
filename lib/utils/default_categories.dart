@@ -1,0 +1,1 @@
+List<String> taskCategories = ["School", "work", "business"];
