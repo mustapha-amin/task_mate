@@ -17,14 +17,13 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Home",
+          "TaskMate",
           style: kTextStyle(30, isBold: true),
-        ),
-        centerTitle: true,
+        ).padX(15),
       ),
       body: Column(
         children: [
-           ProgressWidget(),
+          ProgressWidget(),
         ],
       ).padX(25),
     );
