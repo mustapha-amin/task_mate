@@ -27,25 +27,27 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return Sizer(builder: (context, __, ___) {
-      return MaterialApp(
-        theme: ThemeData.from(
-            colorScheme:
-                ColorScheme.fromSeed(seedColor: const Color(0xFF007AFF))),
-        home: MultiProvider(
-          providers: [
-            Provider<TasksDB>(
-              create: (_) => TasksDB(tasksBox: Hive.box<TaskModel>('tasks')),
-            ),
-            ChangeNotifierProvider(
-              create: (_) =>
-                  TasksProvider(tasksDB: Provider.of<TasksDB>(context)),
-            )
-          ],
-          child: const AppBottomNavBar(),
-        ),
-        debugShowCheckedModeBanner: false,
-      );
-    });
+    return Sizer(
+      builder: (_, __, ___) {
+        return MaterialApp(
+          theme: ThemeData.from(
+              colorScheme:
+                  ColorScheme.fromSeed(seedColor: const Color(0xFF007AFF))),
+          home: MultiProvider(
+            providers: [
+              Provider<TasksDB>(
+                create: (_) => TasksDB(tasksBox: Hive.box<TaskModel>('tasks')),
+              ),
+              ChangeNotifierProvider(
+                create: (context) => TasksProvider(
+                    tasksDB: Provider.of<TasksDB>(context, listen: false)),
+              )
+            ],
+            child: AppBottomNavBar(),
+          ),
+          debugShowCheckedModeBanner: false,
+        );
+      },
+    );
   }
 }

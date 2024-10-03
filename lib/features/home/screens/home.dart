@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "TaskMate",
+          "Home",
           style: kTextStyle(30, isBold: true),
         ).padX(15),
       ),
