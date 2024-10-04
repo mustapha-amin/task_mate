@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:task_mate/services/notifications_service.dart';
 
 import '../../utils/colors.dart';
 import '../add_task/screens/add_task.dart';
 import '../home/screens/home.dart';
 import '../tasks/screens/tasks.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class AppBottomNavBar extends StatefulWidget {
   const AppBottomNavBar({super.key});
@@ -15,6 +17,19 @@ class AppBottomNavBar extends StatefulWidget {
 
 class _AppBottomNavBarState extends State<AppBottomNavBar> {
   int _currentIndex = 0;
+
+  void requestNotificationPermission() async {
+    PermissionStatus status = await Permission.notification.status;
+    if (!status.isGranted) {
+      Permission.notification.request();
+    }
+  }
+
+  @override
+  void initState() {
+    requestNotificationPermission();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

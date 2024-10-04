@@ -10,6 +10,8 @@ import 'package:task_mate/services/categories_db.dart';
 import 'package:task_mate/services/tasks_db.dart';
 import 'package:sizer/sizer.dart';
 
+import 'services/notifications_service.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -17,6 +19,7 @@ Future<void> main() async {
   Hive.registerAdapter(CategoryModelAdapter());
   await Hive.openBox<TaskModel>('tasks_db0');
   await Hive.openBox<CategoryModel>('categories_db');
+  await NotificationService.init();
   runApp(const MyApp());
 }
 

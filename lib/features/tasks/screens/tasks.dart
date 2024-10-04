@@ -50,13 +50,13 @@ class _TasksState extends State<Tasks> with SingleTickerProviderStateMixin {
             itemCount: tasksProvider.tasks
                 .where((task) =>
                     task.completed == false &&
-                    task.dateTime!.kIsAfter(DateTime.now()))
+                    !task.dateTime!.kIsAfter(DateTime.now()))
                 .length,
             itemBuilder: (context, index) {
               TaskModel taskModel = tasksProvider.tasks
                   .where((task) =>
                       task.completed == false &&
-                      task.dateTime!.kIsAfter(DateTime.now()))
+                      !task.dateTime!.kIsAfter(DateTime.now()))
                   .toList()[index];
               return TaskTile(
                 taskModel: taskModel,
