@@ -44,7 +44,7 @@ class _HomeState extends State<Home> {
                 initiallyExpanded: true,
                 title: Text(
                   "Today's tasks",
-                  style: kTextStyle(23, isBold: true),
+                  style: kTextStyle(22, isBold: true),
                 ),
                 children: [
                   ...todaysTasks
@@ -64,7 +64,7 @@ class _HomeState extends State<Home> {
                   initiallyExpanded: true,
                   title: Text(
                     "Completed today",
-                    style: kTextStyle(23, isBold: true),
+                    style: kTextStyle(22, isBold: true),
                   ),
                   children: [
                     ...completedTasks.map((tasks) => TaskTile(

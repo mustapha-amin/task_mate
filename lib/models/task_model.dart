@@ -11,13 +11,13 @@ class TaskModel extends HiveObject {
   @HiveField(2)
   bool? completed;
   @HiveField(3)
-  int? categoryIndex;
+  String? category;
 
   TaskModel({
     this.task,
     this.dateTime,
     this.completed,
-    this.categoryIndex,
+    this.category,
   });
 
   @override
@@ -27,7 +27,7 @@ class TaskModel extends HiveObject {
             dateTime == other.dateTime &&
             task == other.task &&
             completed == other.completed &&
-            categoryIndex == other.categoryIndex;
+            category == other.category;
   }
 
   @override
@@ -35,20 +35,20 @@ class TaskModel extends HiveObject {
 
   @override
   String toString() {
-    return "$task ${dateTime.toString()} $completed $categoryIndex";
+    return "$task ${dateTime.toString()} $completed $category";
   }
 
   TaskModel copyWith({
     String? task,
     DateTime? dateTime,
     bool? completed,
-    int? categoryIndex,
+    String? category,
   }) {
     return TaskModel(
       task: task ?? this.task,
       dateTime: dateTime ?? this.dateTime,
       completed: completed ?? this.completed,
-      categoryIndex: categoryIndex ?? this.categoryIndex,
+      category: category ?? this.category,
     );
   }
 }

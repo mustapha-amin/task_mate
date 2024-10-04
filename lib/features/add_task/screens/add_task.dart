@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 import 'package:task_mate/features/add_task/screens/edit_categories.dart';
+import 'package:task_mate/models/category_model.dart';
 import 'package:task_mate/models/task_model.dart';
+import 'package:task_mate/providers/categories_provider.dart';
 import 'package:task_mate/providers/tasks_provider.dart';
 import 'package:task_mate/shared/spacing.dart';
 import 'package:task_mate/utils/colors.dart';
@@ -26,11 +28,17 @@ class _AddTaskState extends State<AddTask> {
   DateTime? date;
   TimeOfDay? timeOfDay;
   DateTime? dateTime;
-  int categoryIndex = 0;
+  String selectedCategory = "School";
 
   @override
   Widget build(BuildContext context) {
     TasksProvider tasksProvider = Provider.of<TasksProvider>(context);
+    CategoriesProvider categoriesProvider =
+        Provider.of<CategoriesProvider>(context);
+    List<CategoryModel> categories = [
+      ...taskCategories,
+      ...categoriesProvider.categories
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -67,22 +75,22 @@ class _AddTaskState extends State<AddTask> {
                 Wrap(
                   spacing: 10,
                   children: [
-                    ...taskCategories.map(
+                    ...categories.map(
                       (category) => ChoiceChip(
                         selectedColor: AppColors.primaryColor,
                         label: Text(
-                          category,
+                          category.category!,
                           style: kTextStyle(14,
-                              color: taskCategories.indexOf(category) ==
-                                      categoryIndex
+                              color: category.category ==
+                                      selectedCategory
                                   ? Colors.white
                                   : Colors.black),
                         ),
-                        selected:
-                            taskCategories.indexOf(category) == categoryIndex,
+                        selected:category.category ==
+                                      selectedCategory,
                         onSelected: (_) {
                           setState(() {
-                            categoryIndex = taskCategories.indexOf(category);
+                            selectedCategory = category.category!;
                           });
                         },
                       ),
@@ -163,7 +171,7 @@ class _AddTaskState extends State<AddTask> {
                     task: tasknameCtrl.text,
                     dateTime: dateTime!,
                     completed: false,
-                    categoryIndex: categoryIndex,
+                    category: selectedCategory,
                   ));
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(

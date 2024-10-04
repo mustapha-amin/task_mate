@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:task_mate/features/btm_nav_bar/btm_nav_bar.dart';
+import 'package:task_mate/models/category_model.dart';
 import 'package:task_mate/models/task_model.dart';
+import 'package:task_mate/providers/categories_provider.dart';
 import 'package:task_mate/providers/tasks_provider.dart';
+import 'package:task_mate/services/categories_db.dart';
 import 'package:task_mate/services/tasks_db.dart';
 import 'package:sizer/sizer.dart';
 
@@ -12,7 +14,9 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(TaskModelAdapter());
-  await Hive.openBox<TaskModel>('task_db');
+  Hive.registerAdapter(CategoryModelAdapter());
+  await Hive.openBox<TaskModel>('tasks_db0');
+  await Hive.openBox<CategoryModel>('categories_db');
   runApp(const MyApp());
 }
 
@@ -29,13 +33,22 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         Provider<TasksDB>(
-          create: (_) => TasksDB(tasksBox: Hive.box<TaskModel>('task_db')),
+          create: (_) => TasksDB(tasksBox: Hive.box<TaskModel>('tasks_db0')),
+        ),
+        Provider<CategoriesDB>(
+          create: (_) =>
+              CategoriesDB(tasksBox: Hive.box<CategoryModel>('categories_db')),
         ),
         ChangeNotifierProvider<TasksProvider>(
           create: (context) => TasksProvider(
             tasksDB: Provider.of<TasksDB>(context, listen: false),
           ),
-        )
+        ),
+        ChangeNotifierProvider<CategoriesProvider>(
+          create: (context) => CategoriesProvider(
+            categoriesDB: Provider.of<CategoriesDB>(context, listen: false),
+          ),
+        ),
       ],
       child: Sizer(
         builder: (_, __, ___) {
