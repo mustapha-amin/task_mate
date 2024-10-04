@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+import 'package:task_mate/features/add_task/screens/edit_categories.dart';
 import 'package:task_mate/models/task_model.dart';
 import 'package:task_mate/providers/tasks_provider.dart';
 import 'package:task_mate/shared/spacing.dart';
@@ -34,7 +35,7 @@ class _AddTaskState extends State<AddTask> {
       appBar: AppBar(
         title: Text(
           "Add task",
-          style: kTextStyle(25, isBold: true),
+          style: kTextStyle(23, isBold: true),
         ),
         centerTitle: true,
       ),
@@ -47,7 +48,7 @@ class _AddTaskState extends State<AddTask> {
               children: [
                 Text(
                   "Task Name",
-                  style: kTextStyle(22, isBold: true),
+                  style: kTextStyle(21, isBold: true),
                 ),
                 TextField(
                   controller: tasknameCtrl,
@@ -61,7 +62,7 @@ class _AddTaskState extends State<AddTask> {
                 spaceY(20),
                 Text(
                   "Category",
-                  style: kTextStyle(22, isBold: true),
+                  style: kTextStyle(21, isBold: true),
                 ),
                 Wrap(
                   spacing: 10,
@@ -87,15 +88,22 @@ class _AddTaskState extends State<AddTask> {
                       ),
                     ),
                     IconButton(
-                      onPressed: () {},
-                      icon: Icon(Icons.edit),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const EditCategories(),
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.edit),
                     ),
                   ],
                 ),
                 spaceY(20),
                 Text(
                   "Date and Time",
-                  style: kTextStyle(22, isBold: true),
+                  style: kTextStyle(21, isBold: true),
                 ),
                 TextField(
                   controller: dateTimeCtrl,

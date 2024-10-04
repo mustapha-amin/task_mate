@@ -31,7 +31,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(
           "Home",
-          style: kTextStyle(25, isBold: true),
+          style: kTextStyle(23, isBold: true),
         ).padX(10),
       ),
       body: SingleChildScrollView(
@@ -67,11 +67,10 @@ class _HomeState extends State<Home> {
                     style: kTextStyle(23, isBold: true),
                   ),
                   children: [
-                    ...completedTasks
-                        .map((tasks) => TaskTile(
-                              taskModel: tasks,
-                              isHomeScreen: true,
-                            )),
+                    ...completedTasks.map((tasks) => TaskTile(
+                          taskModel: tasks,
+                          isHomeScreen: true,
+                        )),
                   ],
                 )
           ],
