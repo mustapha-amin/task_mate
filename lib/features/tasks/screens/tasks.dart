@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_mate/features/home/widgets/task_tile.dart';
 import 'package:task_mate/models/task_model.dart';
 import 'package:task_mate/providers/tasks_provider.dart';
+import 'package:task_mate/utils/colors.dart';
+import 'package:task_mate/utils/extensions.dart';
 
 import '../../../utils/textstyle.dart';
 
@@ -28,12 +31,14 @@ class _TasksState extends State<Tasks> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: Text(
           'Tasks',
-          style: kTextStyle(30, isBold: true),
+          style: kTextStyle(25, isBold: true),
         ),
         bottom: TabBar(
           controller: _tabController,
+          labelStyle: kTextStyle(17),
+          labelColor: AppColors.primaryColor,
           tabs: [
-            Tab(text: 'Pending'),
+            Tab(text: 'Upcoming'),
             Tab(text: 'Overdue'),
           ],
         ),
@@ -41,17 +46,40 @@ class _TasksState extends State<Tasks> with SingleTickerProviderStateMixin {
       body: TabBarView(
         controller: _tabController,
         children: [
-          Center(
-              child: ListView.builder(
-            itemCount: tasksProvider.tasks.length,
+          ListView.builder(
+            itemCount: tasksProvider.tasks
+                .where((task) =>
+                    task.completed == false &&
+                    task.dateTime!.kIsAfter(DateTime.now()))
+                .length,
             itemBuilder: (context, index) {
-              TaskModel taskModel = tasksProvider.tasks[index];
-              return Text(taskModel.toString());
+              TaskModel taskModel = tasksProvider.tasks
+                  .where((task) =>
+                      task.completed == false &&
+                      task.dateTime!.kIsAfter(DateTime.now()))
+                  .toList()[index];
+              return TaskTile(
+                taskModel: taskModel,
+                isHomeScreen: false,
+              );
             },
-          )),
-          Center(child: Text('Content for Tab 2')),
+          ),
+          ListView.builder(
+            itemCount: tasksProvider.tasks
+                .where((task) => DateTime.now().kIsAfter(task.dateTime!))
+                .length,
+            itemBuilder: (context, index) {
+              TaskModel taskModel = tasksProvider.tasks
+                  .where((task) => DateTime.now().kIsAfter(task.dateTime!))
+                  .toList()[index];
+              return TaskTile(
+                taskModel: taskModel,
+                isHomeScreen: false,
+              );
+            },
+          )
         ],
-      ),
+      ).padX(10),
     );
   }
 }

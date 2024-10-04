@@ -34,7 +34,7 @@ class _AddTaskState extends State<AddTask> {
       appBar: AppBar(
         title: Text(
           "Add task",
-          style: kTextStyle(30, isBold: true),
+          style: kTextStyle(25, isBold: true),
         ),
         centerTitle: true,
       ),
@@ -47,10 +47,11 @@ class _AddTaskState extends State<AddTask> {
               children: [
                 Text(
                   "Task Name",
-                  style: kTextStyle(25, isBold: true),
+                  style: kTextStyle(22, isBold: true),
                 ),
                 TextField(
                   controller: tasknameCtrl,
+                  textCapitalization: TextCapitalization.sentences,
                   decoration: InputDecoration(
                     hintText: "Task",
                     hintStyle: kTextStyle(18, color: Colors.grey),
@@ -60,7 +61,7 @@ class _AddTaskState extends State<AddTask> {
                 spaceY(20),
                 Text(
                   "Category",
-                  style: kTextStyle(25, isBold: true),
+                  style: kTextStyle(22, isBold: true),
                 ),
                 Wrap(
                   spacing: 10,
@@ -85,12 +86,16 @@ class _AddTaskState extends State<AddTask> {
                         },
                       ),
                     ),
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(Icons.edit),
+                    ),
                   ],
                 ),
                 spaceY(20),
                 Text(
                   "Date and Time",
-                  style: kTextStyle(25, isBold: true),
+                  style: kTextStyle(22, isBold: true),
                 ),
                 TextField(
                   controller: dateTimeCtrl,

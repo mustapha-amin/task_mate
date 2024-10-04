@@ -49,6 +49,7 @@ class _AppBottomNavBarState extends State<AppBottomNavBar> {
               },
               backgroundColor: AppColors.primaryColor,
               foregroundColor: Colors.white,
+              elevation: 3,
               child: const Icon(Icons.add),
             )
           : const SizedBox(),
