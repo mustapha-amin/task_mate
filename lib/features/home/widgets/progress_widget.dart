@@ -75,7 +75,7 @@ class _ProgressWidgetState extends State<ProgressWidget> {
                                 .where((task) => task.completed == true)
                                 .length /
                             todaysTasks.length)),
-                    duration: const Duration(milliseconds: 400),
+                    duration: const Duration(milliseconds: 300),
                     builder: (context, progress, _) {
                       return LinearProgressIndicator(
                         value: todaysTasks.isEmpty ? 0 : progress,
