@@ -17,25 +17,6 @@ class ProgressWidget extends StatefulWidget {
 }
 
 class _ProgressWidgetState extends State<ProgressWidget> {
-  // late AnimationController _controller;
-  // late Animation<Color> _animationColor;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   _controller =
-  //       AnimationController(vsync: this, duration: Duration(milliseconds: 600))
-  //         ..repeat(reverse: true);
-  //   _animationColor = Tween<Color>(begin: Colors.white, end: Colors.grey[500])
-  //       .animate(_controller);
-  // }
-
-  // @override
-  // void dispose() {
-  //   _controller.dispose();
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
     TasksProvider tasksProvider = Provider.of<TasksProvider>(context);
@@ -47,7 +28,7 @@ class _ProgressWidgetState extends State<ProgressWidget> {
         todaysTasks.where((task) => task.completed == true).toList();
     return Column(
       children: [
-         spaceY(10),
+        spaceY(10),
         Container(
           width: double.infinity,
           height: 25.h,
@@ -87,18 +68,24 @@ class _ProgressWidgetState extends State<ProgressWidget> {
                       "${((completedTasks.length / todaysTasks.length) * 100).round()}%",
                       style: kTextStyle(18, color: Colors.white),
                     ),
-                  LinearProgressIndicator(
-                    value: todaysTasks.isEmpty
-                        ? 0
-                        : (todaysTasks
+                  TweenAnimationBuilder(
+                    tween: Tween<double>(
+                        begin: 0,
+                        end: (todaysTasks
                                 .where((task) => task.completed == true)
                                 .length /
-                            todaysTasks.length),
-                    minHeight: 7,
-                    borderRadius: BorderRadius.circular(10),
-                    backgroundColor: Colors.blueGrey[300],
-                    color: Colors.white,
-                  ),
+                            todaysTasks.length)),
+                    duration: const Duration(milliseconds: 400),
+                    builder: (context, progress, _) {
+                      return LinearProgressIndicator(
+                        value: todaysTasks.isEmpty ? 0 : progress,
+                        minHeight: 7,
+                        borderRadius: BorderRadius.circular(10),
+                        backgroundColor: Colors.blueGrey[300],
+                        color: Colors.white,
+                      );
+                    },
+                  )
                 ],
               )
             ],
