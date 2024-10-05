@@ -46,20 +46,62 @@ class _TaskTileState extends State<TaskTile> {
       elevation: 2,
       shadowColor: Colors.grey[100],
       child: ListTile(
-        title: Text(
-          widget.taskModel!.task!,
-          style: kTextStyle(18,
-                  isBold: true,
-                  color:
-                      widget.taskModel!.completed! ? Colors.grey : Colors.black)
-              .copyWith(
-            decoration: widget.taskModel!.completed == true
-                ? TextDecoration.lineThrough
-                : TextDecoration.none,
+        onLongPress: () {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text("Delete", style: kTextStyle(20)),
+                content: Text(
+                  "Do you want to delete this task?",
+                  style: kTextStyle(15),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      tasksProvider.deleteTask(widget.taskModel!);
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Yes",
+                      style: kTextStyle(15, color: Colors.red),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("No", style: kTextStyle(15)),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        title: Text.rich(
+          TextSpan(
+            text: "${widget.taskModel!.task!} - ",
+            style: kTextStyle(18,
+                    isBold: true,
+                    color: widget.taskModel!.completed!
+                        ? Colors.grey
+                        : Colors.black)
+                .copyWith(
+              decoration: widget.taskModel!.completed == true
+                  ? TextDecoration.lineThrough
+                  : TextDecoration.none,
+            ),
+            children: [
+              TextSpan(
+                text: DateFormat.Hm().format(widget.taskModel!.dateTime!),
+                style: kTextStyle(15),
+              )
+            ],
           ),
         ),
         subtitle: Text(
-          DateFormat.Hm().format(widget.taskModel!.dateTime!),
+          widget.taskModel!.category!,
+          style: kTextStyle(14),
         ),
         trailing: widget.isHomeScreen!
             ? Checkbox(
@@ -80,78 +122,81 @@ class _TaskTileState extends State<TaskTile> {
               ),
         onTap: () {
           showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text("Edit task"),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      TextField(
-                        controller: taskCtrl,
-                        decoration:
-                            const InputDecoration(border: OutlineInputBorder()),
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(
+                  "Edit task",
+                  style: kTextStyle(20),
+                ),
+                content: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    TextField(
+                      controller: taskCtrl,
+                      decoration:
+                          const InputDecoration(border: OutlineInputBorder()),
+                    ),
+                    spaceY(10),
+                    TextField(
+                      readOnly: true,
+                      controller: dateTimeCtrl,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                       ),
-                      spaceY(10),
-                      TextField(
-                        readOnly: true,
-                        controller: dateTimeCtrl,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                        ),
-                        onTap: () async {
-                          date = await showDatePicker(
-                            context: context,
-                            initialDate: widget.taskModel!.dateTime!,
-                            firstDate: widget.taskModel!.dateTime!,
-                            lastDate: DateTime(2099),
-                          );
-                          if (date != null) {
-                            timeOfDay = await showTimePicker(
-                                // ignore: use_build_context_synchronously
-                                context: context,
-                                initialTime: TimeOfDay.now(),
-                                builder: (context, child) {
-                                  return MediaQuery(
-                                      data: MediaQuery.of(context).copyWith(
-                                          alwaysUse24HourFormat: false),
-                                      child: child!);
-                                });
-                            if (timeOfDay != null) {
-                              dateTime = DateTime(
-                                  date!.year,
-                                  date!.month,
-                                  date!.day,
-                                  timeOfDay!.hour,
-                                  timeOfDay!.minute);
-                              setState(() {
-                                dateTimeCtrl.text =
-                                    "${DateFormat('d/M/y').format(dateTime!)} - ${DateFormat.Hm().format(dateTime!)}";
-                              });
-                            }
-                          }
-                        },
-                      ),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        tasksProvider.editTask(
-                          widget.taskModel!.key!,
-                          widget.taskModel!.copyWith(
-                            task: taskCtrl.text.trim(),
-                            dateTime: dateTime,
-                            completed: false,
-                          ),
+                      onTap: () async {
+                        date = await showDatePicker(
+                          context: context,
+                          initialDate: widget.taskModel!.dateTime!,
+                          firstDate: widget.taskModel!.dateTime!,
+                          lastDate: DateTime(2099),
                         );
-                        Navigator.of(context).pop();
+                        if (date != null) {
+                          timeOfDay = await showTimePicker(
+                              // ignore: use_build_context_synchronously
+                              context: context,
+                              initialTime: TimeOfDay.now(),
+                              builder: (context, child) {
+                                return MediaQuery(
+                                    data: MediaQuery.of(context)
+                                        .copyWith(alwaysUse24HourFormat: false),
+                                    child: child!);
+                              });
+                          if (timeOfDay != null) {
+                            dateTime = DateTime(date!.year, date!.month,
+                                date!.day, timeOfDay!.hour, timeOfDay!.minute);
+                            setState(() {
+                              dateTimeCtrl.text =
+                                  "${DateFormat('d/M/y').format(dateTime!)} - ${DateFormat.Hm().format(dateTime!)}";
+                            });
+                          }
+                        }
                       },
-                      child: const Text("Save"),
-                    )
+                    ),
                   ],
-                );
-              });
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      tasksProvider.editTask(
+                        widget.taskModel!.key!,
+                        widget.taskModel!.copyWith(
+                          task: taskCtrl.text.trim(),
+                          dateTime: dateTime,
+                          completed: false,
+                        ),
+                      );
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(
+                      "Save",
+                      style: kTextStyle(18),
+                    ),
+                  )
+                ],
+              );
+            },
+          );
         },
       ),
     );
