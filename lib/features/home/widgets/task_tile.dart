@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:task_mate/models/task_model.dart';
 import 'package:task_mate/providers/tasks_provider.dart';
+import 'package:task_mate/services/notifications_service.dart';
 import 'package:task_mate/shared/spacing.dart';
 import 'package:task_mate/utils/textstyle.dart';
 
@@ -69,30 +70,33 @@ class _TaskTileState extends State<TaskTile> {
                 ),
               )
             : IconButton(
-                onPressed: () {
+                onPressed: () async {
                   tasksProvider.deleteTask(widget.taskModel!);
+                  await NotificationService.cancelScheduledNotification(
+                    widget.taskModel!.dateTime.hashCode,
+                  );
                 },
-                icon: Icon(Icons.delete),
+                icon: const Icon(Icons.delete),
               ),
         onTap: () {
           showDialog(
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: Text("Edit task"),
+                  title: const Text("Edit task"),
                   content: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       TextField(
                         controller: taskCtrl,
                         decoration:
-                            InputDecoration(border: OutlineInputBorder()),
+                            const InputDecoration(border: OutlineInputBorder()),
                       ),
                       spaceY(10),
                       TextField(
                         readOnly: true,
                         controller: dateTimeCtrl,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
                         onTap: () async {
@@ -143,7 +147,7 @@ class _TaskTileState extends State<TaskTile> {
                         );
                         Navigator.of(context).pop();
                       },
-                      child: Text("Save"),
+                      child: const Text("Save"),
                     )
                   ],
                 );

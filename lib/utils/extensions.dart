@@ -17,16 +17,13 @@ extension DateTimeExts on DateTime {
     return day == other!.day && month == other.month && year == other.year;
   }
 
-  bool kIsAfter(DateTime? other) {
-    bool sameYear = year == other!.year;
-    bool sameMonth = month == other.month;
-    if (sameYear) {
-      if (sameMonth) {
-        return DateTime.now().day > other.day;
-      } else {
-        return DateTime.now().month > other.month;
-      }
-    }
-    return false;
+  bool kIsAfter(DateTime other) {
+    if (year > other.year) return true;
+    if (year < other.year) return false;
+
+    if (month > other.month) return true;
+    if (month < other.month) return false;
+
+    return day > other.day;
   }
 }

@@ -40,10 +40,10 @@ class _EditCategoriesState extends State<EditCategories> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: Text("Add category"),
+                      title: const Text("Add category"),
                       content: TextField(
                         controller: categoryController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           border: OutlineInputBorder(),
                         ),
                       ),
@@ -133,7 +133,7 @@ class _EditCategoriesState extends State<EditCategories> {
                         },
                       );
                     },
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                   ),
                 ),
               )

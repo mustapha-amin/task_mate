@@ -8,6 +8,7 @@ import 'package:task_mate/models/category_model.dart';
 import 'package:task_mate/models/task_model.dart';
 import 'package:task_mate/providers/categories_provider.dart';
 import 'package:task_mate/providers/tasks_provider.dart';
+import 'package:task_mate/services/notifications_service.dart';
 import 'package:task_mate/shared/spacing.dart';
 import 'package:task_mate/utils/colors.dart';
 import 'package:task_mate/utils/default_categories.dart';
@@ -81,13 +82,11 @@ class _AddTaskState extends State<AddTask> {
                         label: Text(
                           category.category!,
                           style: kTextStyle(14,
-                              color: category.category ==
-                                      selectedCategory
+                              color: category.category == selectedCategory
                                   ? Colors.white
                                   : Colors.black),
                         ),
-                        selected:category.category ==
-                                      selectedCategory,
+                        selected: category.category == selectedCategory,
                         onSelected: (_) {
                           setState(() {
                             selectedCategory = category.category!;
@@ -165,14 +164,24 @@ class _AddTaskState extends State<AddTask> {
                   borderRadius: BorderRadius.circular(15),
                 ),
               ),
-              onPressed: () {
+              onPressed: () async {
                 if (tasknameCtrl.text.isNotEmpty && dateTime != null) {
-                  tasksProvider.addTask(TaskModel(
-                    task: tasknameCtrl.text,
-                    dateTime: dateTime!,
-                    completed: false,
-                    category: selectedCategory,
-                  ));
+                  try {
+                    tasksProvider.addTask(TaskModel(
+                      task: tasknameCtrl.text,
+                      dateTime: dateTime!,
+                      completed: false,
+                      category: selectedCategory,
+                    ));
+                    await NotificationService.scheduleTaskNotification(
+                      dateTime.hashCode,
+                      tasknameCtrl.text.trim(),
+                      "You have a task to complete",
+                      dateTime!,
+                    );
+                  } catch (e) {
+                    log(e.toString());
+                  }
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text("Task created"),

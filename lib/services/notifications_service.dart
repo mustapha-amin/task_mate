@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 class NotificationService {
-
   static final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -24,35 +21,25 @@ class NotificationService {
   }
 
   static Future<void> scheduleTaskNotification(
-      String? title, String? body, DateTime selectedTime) async {
+    int? id,
+    String? title,
+    String? body,
+    DateTime selectedTime,
+  ) async {
     final tz.TZDateTime scheduledTime =
-        tz.TZDateTime.from(selectedTime, tz.getLocation('Africa/Lagos'));
+        tz.TZDateTime.from(selectedTime, tz.local);
     try {
-      await _notificationsPlugin.show(
-          10,
-          "title",
-          "body",
-          NotificationDetails(
-            android: AndroidNotificationDetails(
-              'simple_notification_channel', // channel ID
-              'Simple Notifications', // channel Name
-              channelDescription:
-                  'This channel is used for simple notifications',
-              importance: Importance.max,
-              priority: Priority.high,
-              ticker: 'ticker',
-            ),
-          ));
-      // await _notificationsPlugin.zonedSchedule(
-      //   1,
-      //   title,
-      //   body,
-      //   scheduledTime,
-      //   _notificationDetails(),
-      //   uiLocalNotificationDateInterpretation:
-      //       UILocalNotificationDateInterpretation.absoluteTime,
-      //   matchDateTimeComponents: DateTimeComponents.dateAndTime,
-      // );
+      await _notificationsPlugin.zonedSchedule(
+        id!,
+        title,
+        body,
+        scheduledTime,
+        _notificationDetails(),
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        matchDateTimeComponents: DateTimeComponents.dateAndTime,
+        androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      );
 
       debugPrint('Notification scheduled successfully');
     } catch (e) {
@@ -60,7 +47,7 @@ class NotificationService {
     }
   }
 
-  NotificationDetails _notificationDetails() {
+  static NotificationDetails _notificationDetails() {
     return const NotificationDetails(
       android: AndroidNotificationDetails(
         'your_channel_id',
@@ -68,8 +55,12 @@ class NotificationService {
         channelDescription: 'your_channel_description',
         importance: Importance.max,
         priority: Priority.high,
-        showWhen: false,
+        audioAttributesUsage: AudioAttributesUsage.notificationRingtone,
       ),
     );
+  }
+
+  static Future<void> cancelScheduledNotification(int? id) async {
+    await _notificationsPlugin.cancel(id!);
   }
 }
