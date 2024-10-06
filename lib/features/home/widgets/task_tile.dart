@@ -81,7 +81,7 @@ class _TaskTileState extends State<TaskTile> {
         title: Text.rich(
           TextSpan(
             text: "${widget.taskModel!.task!} - ",
-            style: kTextStyle(18,
+            style: kTextStyle(16,
                     isBold: true,
                     color: widget.taskModel!.completed!
                         ? Colors.grey

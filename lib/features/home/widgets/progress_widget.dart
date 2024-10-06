@@ -49,7 +49,7 @@ class _ProgressWidgetState extends State<ProgressWidget> {
                 children: [
                   Text(
                     "Today's progress summary",
-                    style: kTextStyle(22, color: Colors.white, isBold: true),
+                    style: kTextStyle(20, color: Colors.white, isBold: true),
                   ),
                   spaceY(10),
                   Text(

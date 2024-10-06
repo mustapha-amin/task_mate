@@ -31,7 +31,7 @@ class _TasksState extends State<Tasks> with SingleTickerProviderStateMixin {
       appBar: AppBar(
         title: Text(
           'Tasks',
-          style: kTextStyle(23, isBold: true),
+          style: kTextStyle(22, isBold: true),
         ),
         bottom: TabBar(
           controller: _tabController,

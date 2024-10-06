@@ -30,7 +30,7 @@ class _HomeState extends State<Home> {
       appBar: AppBar(
         title: Text(
           "Home",
-          style: kTextStyle(23, isBold: true),
+          style: kTextStyle(22, isBold: true),
         ).padX(10),
       ),
       body: SingleChildScrollView(
@@ -43,7 +43,7 @@ class _HomeState extends State<Home> {
                 initiallyExpanded: true,
                 title: Text(
                   "Today's tasks",
-                  style: kTextStyle(22, isBold: true),
+                  style: kTextStyle(20, isBold: true),
                 ),
                 children: [
                   ...todaysTasks
@@ -63,7 +63,7 @@ class _HomeState extends State<Home> {
                   initiallyExpanded: true,
                   title: Text(
                     "Completed today",
-                    style: kTextStyle(22, isBold: true),
+                    style: kTextStyle(20, isBold: true),
                   ),
                   children: [
                     ...completedTasks.map((tasks) => TaskTile(

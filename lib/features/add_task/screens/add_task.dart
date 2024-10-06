@@ -44,7 +44,7 @@ class _AddTaskState extends State<AddTask> {
       appBar: AppBar(
         title: Text(
           "Add task",
-          style: kTextStyle(23, isBold: true),
+          style: kTextStyle(22, isBold: true),
         ),
         centerTitle: true,
       ),
@@ -204,12 +204,12 @@ class _AddTaskState extends State<AddTask> {
               },
               child: Text(
                 "Create task",
-                style: kTextStyle(20, color: Colors.white),
+                style: kTextStyle(18, color: Colors.white),
               ),
             ),
           ).padY(10),
         ],
-      ).padX(25),
+      ).padX(23),
     );
   }
 }
