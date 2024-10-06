@@ -16,19 +16,6 @@ class AppBottomNavBar extends StatefulWidget {
 class _AppBottomNavBarState extends State<AppBottomNavBar> {
   int _currentIndex = 0;
 
-  void requestNotificationPermission() async {
-    PermissionStatus status = await Permission.notification.status;
-    if (!status.isGranted) {
-      Permission.notification.request();
-    }
-  }
-
-  @override
-  void initState() {
-    requestNotificationPermission();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

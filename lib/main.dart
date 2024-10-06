@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:task_mate/features/btm_nav_bar/btm_nav_bar.dart';
+import 'package:task_mate/features/onboarding/onboarding.dart';
 import 'package:task_mate/models/category_model.dart';
 import 'package:task_mate/models/task_model.dart';
 import 'package:task_mate/providers/categories_provider.dart';
@@ -57,9 +59,25 @@ class _MyAppState extends State<MyApp> {
         builder: (_, __, ___) {
           return MaterialApp(
             theme: ThemeData.from(
-                colorScheme:
-                    ColorScheme.fromSeed(seedColor: const Color(0xFF007AFF))),
-            home: const AppBottomNavBar(),
+              colorScheme: ColorScheme.fromSeed(
+                seedColor: const Color(0xFF007AFF),
+              ),
+            ),
+            home: FutureBuilder(
+              future: Permission.notification.isGranted,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return switch (snapshot.data) {
+                    true => const AppBottomNavBar(),
+                    _ => const OnboardingScreen(),
+                  };
+                }
+              },
+            ),
             debugShowCheckedModeBanner: false,
           );
         },
