@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:provider/provider.dart';
-import 'package:task_mate/services/notifications_service.dart';
-import 'package:task_mate/services/tasks_db.dart';
 
 import '../../utils/colors.dart';
 import '../add_task/screens/add_task.dart';

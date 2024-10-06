@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:task_mate/features/add_task/screens/add_task.dart';
 import 'package:task_mate/models/category_model.dart';
 import 'package:task_mate/providers/categories_provider.dart';
 import 'package:task_mate/utils/default_categories.dart';
